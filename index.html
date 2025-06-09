@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>TabloNest - تبالوهات خشب</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        :root {
+            --primary-color: #222;
+            --secondary-color: #444;
+            --accent-color: #8B4513; /* لون خشبي */
+            --text-color: #111;
+            --light-color: #f8f8f8;
+            --dark-color: #111;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #FBFBFBFBFB;
+            margin: 0;
+            direction: rtl;
+            color: var(--text-color);
+            font-size: 16px;
+        }
+        header, footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+        header img.logo {
+            width: 120px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        header img.logo:hover {
+            transform: scale(1.05);
+        }
+        nav {
+            background-color: var(--primary-color);
+            padding: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav a {
+            color: #fff;
+            margin: 0 8px;
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: inline-block;
+        }
+        nav a:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 15px;
+        }
+        .product {
+            background-color: #fff;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+        .product:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .product:active {
+            transform: translateY(0);
+        }
+        .product img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .product h3 {
+            margin: 10px 0 5px;
+            color: var(--dark-color);
+            font-size: 16px;
+        }
+        .product p {
+            margin: 5px 0;
+            color: var(--secondary-color);
+            font-size: 13px;
+        }
+        .order-section {
+            padding: 20px;
+            background-color: #fff;
+            max-width: 100%;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 90%;
+            box-sizing: border-box;
+        }
+        .order-section input, 
+        .order-section textarea,
+        .order-section select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 15px;
+            transition: border 0.3s ease;
+            box-sizing: border-box;
+        }
+        .order-section input:focus, 
+        .order-section textarea:focus,
+        .order-section select:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+        .order-section button {
+            padding: 12px 20px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+        }
+        .order-section button:hover {
+            background-color: #6B3710;
+            transform: translateY(-2px);
+        }
+        .order-section button:active {
+            transform: translateY(0);
+        }
+        .product-detail {
+            padding: 20px;
+            background-color: #fff;
+            max-width: 100%;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 90%;
+            box-sizing: border-box;
+        }
+        .product-detail-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .product-detail-image {
+            flex: 1;
+            text-align: center;
+        }
+        .product-detail-image img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .product-detail-image img:hover {
+            transform: scale(1.05);
+        }
+        .product-detail-info {
+            flex: 1;
+            text-align: right;
+        }
+        .buy-now-btn {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .buy-now-btn:hover {
+            background-color: #6B3710;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+        .buy-now-btn:active {
+            transform: translateY(0);
+        }
+        .payment-method {
+            margin-top: 12px;
+            padding: 15px;
+            background-color: var(--light-color);
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+        .success-message {
+            text-align: center;
+            padding: 20px;
+            background-color: #f0f8f0;
+            color: #2E8B57;
+            margin-top: 15px;
+            border-radius: 5px;
+            border: 1px solid #C1E1C1;
+        }
+        .total-price {
+            background-color: var(--light-color);
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            color: var(--dark-color);
+        }
+        .shipping-note {
+            color: #d9534f;
+            text-align: center;
+            margin: 15px 0;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .social {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .social a {
+            margin: 0 6px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        .social a:hover {
+            transform: scale(1.1);
+        }
+        .social img {
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+        }
+        .hidden {
+            display: none;
+        }
+        .contact-section {
+            text-align: center;
+            padding: 25px;
+            background-color: #fff;
+            max-width: 100%;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 90%;
+            box-sizing: border-box;
+        }
+        
+        /* تأثيرات النقر */
+        .click-effect {
+            animation: clickAnimation 0.4s ease;
+        }
+        
+        @keyframes clickAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+        
+        /* إضافة أنماط لحقول الإدخال غير المكتملة */
+        .error {
+            border-color: #d9534f !important;
+        }
+        .error-message {
+            color: #d9534f;
+            font-size: 13px;
+            margin-top: -12px;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        /* تحسينات للشاشات الصغيرة */
+        @media (max-width: 480px) {
+            header img.logo {
+                width: 100px;
+            }
+            
+            nav a {
+                margin: 0 4px;
+                padding: 5px 8px;
+                font-size: 13px;
+            }
+            
+            .products {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .product {
+                padding: 10px;
+            }
+            
+            .product img {
+                height: 120px;
+            }
+            
+            .product h3 {
+                font-size: 14px;
+                margin: 8px 0 4px;
+            }
+            
+            .product p {
+                font-size: 12px;
+            }
+            
+            .order-section, .product-detail, .contact-section {
+                padding: 15px;
+                width: 95%;
+            }
+            
+            .order-section input, 
+            .order-section textarea,
+            .order-section select {
+                padding: 8px;
+                font-size: 14px;
+            }
+            
+            .buy-now-btn, .order-section button {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+            
+            .total-price, .payment-method {
+                padding: 12px;
+                font-size: 15px;
+            }
+            
+            .shipping-note {
+                font-size: 13px;
+            }
+        }
+
+        /* تحسينات للشاشات المتوسطة */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .products {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            
+            .product-detail-container {
+                flex-direction: row;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="images/logo.png" alt="TabloNest Logo" class="logo" onclick="showProducts()">
+        <p>متخصصون في التبلوهات والبراويز الخشب المميزة</p>
+        <div class="social">
+            <a href="https://www.facebook.com/share/16NZuSZbrE/" target="_blank">
+                <img src="images/facebook.png" alt="Facebook">
+            </a>
+            <a href="https://www.instagram.com/tablonest.store?utm_source=qr&igsh=djM3YWpwaTl0Z3M0" target="_blank">
+                <img src="images/instagram.png" alt="Instagram">
+            </a>
+            <a href="https://wa.me/201070028085" target="_blank">
+                <img src="images/whatsapp.png" alt="WhatsApp">
+            </a>
+            <a href="https://www.tiktok.com/@tablonest?_t=ZS-8wzNYLVGUqX&_r=1" target="_blank">
+                <img src="images/tiktok.png" alt="tiktok">
+            </a>
+        </div>
+    </header>
+
+    <nav>
+        <a href="#" onclick="showProducts()">الرئيسية</a>
+        <a href="#" onclick="showProducts()">منتجاتنا</a>
+        <a href="#" onclick="showCustomOrder()">صورة من اختيارك</a>
+        <a href="#" onclick="showContact()">تواصل معنا</a>
+    </nav>
+
+    <main>
+        <section id="productsSection">
+            <div class="products">
+                <!-- توليد تلقائي لـ 200 منتج --><script>
+    // عرض أول 5 منتجات للاختبار	
+    for (let i = 1; i <= 25; i++) {
+        document.write(`
+            <div class="product" onclick="showProductDetail(${i}, this)">																		
+                <img src="images/tablo1_${i.toString().padStart(2, '0')}.jpg"
+                <h3>تبلوه ${i}</h3>
+                <p>تبلوه خشب مقاس 30×40</p>
+                <p style="font-weight: bold;">السعر: 200 جنيه</p>
+            </div>
+        `);
+    }
+</script>
+            </div>
+        </section>
+
+        <div id="productDetail" class="product-detail hidden">
+            <div class="product-detail-container">
+                <div class="product-detail-image">
+                    <img id="detailImage" src="" alt="تفاصيل المنتج" onclick="zoomProductImage(this)">
+                </div>
+                <div class="product-detail-info">
+                    <h2>شكراً لاختيارك TabloNest</h2>
+                    <p id="productDescription">تبلوه 30*40 خشب طباعة ديجتال من افضل انواع الطباعة الليزر</p>
+                    <p>جودة عالية - تصميم فريد - يدوم طويلاً</p>
+                    <p>التسليم خلال 1-3 أيام عمل</p> 
+                    <button class="buy-now-btn" onclick="showOrderForm(this)">اشتري الآن</button>
+                </div>
+            </div>
+        </div>
+
+        <section id="orderForm" class="order-section hidden">
+            <h2>اكمل بيانات الطلب</h2>
+            <form id="orderFormData">
+                <label>الاسم بالكامل:</label>
+                <input type="text" name="name" required>
+                <div class="error-message" id="nameError">يرجى إدخال الاسم بالكامل</div>
+
+                <label>رقم الهاتف:</label>
+                <input type="tel" name="phone" required>
+                <div class="error-message" id="phoneError">يرجى إدخال رقم الهاتف</div>
+
+                <label>العنوان بالتفصيل:</label>
+                <textarea name="address" rows="3" required></textarea>
+                <div class="error-message" id="addressError">يرجى إدخال العنوان بالتفصيل</div>
+
+                <label>طريقة الدفع:</label>
+                <select name="payment_method" onchange="showPaymentMethod(this.value)" required>
+                    <option value="">-- اختر طريقة الدفع --</option>
+                    <option value="cash">الدفع عند الاستلام</option>
+                    <option value="instapay">الدفع عبر InstaPay</option>
+                </select>
+                <div class="error-message" id="paymentError">يرجى اختيار طريقة الدفع</div>
+
+                <div id="instapayDetails" class="payment-method hidden">
+                    <p>برجاء التحويل إلى حساب InstaPay التالي:</p>
+                    <p><strong>https://ipn.eg/S/youssef.elwakeel24/instapay/2lAA0A</strong></p>
+                    <p>اضغط الرابط لارسال نقود الي youssef.elwakeel24@instapay</p>
+                </div>
+
+                <div class="total-price">
+                    الإجمالي: 270 جنيه (200 جنيه سعر المنتج + 70 جنيه مصاريف شحن)
+                </div>
+
+                <p class="shipping-note">ملاحظة: الشحن داخل القاهرة والجيزة فقط</p>
+                <p class="shipping-note">ملاحظة: ارسل الصورةعبر واتساب</p>
+
+                <button type="button" onclick="validateOrderForm()">تأكيد الطلب</button>
+            </form>
+
+            <div id="successMessage" class="success-message hidden">
+                <h3>تم استلام طلبك بنجاح!</h3>
+                <p>سيتم التواصل معك خلال 24 ساعة لتأكيد التفاصيل.</p>
+                <p>شكراً لثقتك في TabloNest</p>
+            </div>
+        </section>
+
+        <section id="customOrder" class="order-section hidden">
+            <h2>اطبع تصميمك الخاص</h2>
+            <form id="customOrderFormData">
+                <label>ارفع صورة من اختيارك:</label>
+                <input type="file" name="design_file" accept="image/*" required>
+                <div class="error-message" id="fileError">يرجى اختيار صورة للتصميم</div>
+
+                <label>الاسم بالكامل:</label>
+                <input type="text" name="name" required>
+                <div class="error-message" id="customNameError">يرجى إدخال الاسم بالكامل</div>
+
+                <label>رقم الهاتف:</label>
+                <input type="tel" name="phone" required>
+                <div class="error-message" id="customPhoneError">يرجى إدخال رقم الهاتف</div>
+
+                <label>العنوان بالتفصيل:</label>
+                <textarea name="address" rows="3" required></textarea>
+                <div class="error-message" id="customAddressError">يرجى إدخال العنوان بالتفصيل</div>
+
+                <label>طريقة الدفع:</label>
+                <select name="payment_method" onchange="showCustomPaymentMethod(this.value)" required>
+                    <option value="">-- اختر طريقة الدفع --</option>
+                    <option value="cash">الدفع عند الاستلام</option>
+                    <option value="instapay">الدفع عبر InstaPay</option>
+                </select>
+                <div class="error-message" id="customPaymentError">يرجى اختيار طريقة الدفع</div>
+
+                <div id="customInstapayDetails" class="payment-method hidden">
+                    <p>برجاء التحويل إلى حساب InstaPay التالي:</p>
+                    <p><strong>https://ipn.eg/S/youssef.elwakeel24/instapay/2lAA0A</strong></p>
+                    <p>اضغط الرابط لارسال نقود الي youssef.elwakeel24@instapay</p>
+                </div>
+
+                <div class="total-price">
+                    الإجمالي: 370 جنيه (300 جنيه سعر المنتج + 70 جنيه مصاريف شحن)
+                </div>
+
+                <p class="shipping-note">ملاحظة: الشحن داخل القاهرة والجيزة فقط</p>
+                <p class="shipping-note">ملاحظة: ارسل الصورةعبر واتساب</p>
+
+                <button type="button" onclick="validateCustomOrderForm()">تأكيد الطلب</button>
+            </form>
+
+            <div id="customSuccessMessage" class="success-message hidden">
+                <h3>تم استلام طلبك بنجاح!</h3>
+                <p>سيتم التواصل معك خلال 24 ساعة لتأكيد التفاصيل.</p>
+                <p>شكراً لثقتك في TabloNest</p>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section hidden">
+            <h2>تواصل معنا</h2>
+            <div class="social">
+                <a href="https://www.facebook.com/TabloNest" target="_blank">
+                    <img src="images/facebook.png" alt="Facebook">
+                </a>
+                <a href="https://www.instagram.com/TabloNest" target="_blank">
+                    <img src="images/instagram.png" alt="Instagram">
+                </a>
+                <a href="https://wa.me/201070028085" target="_blank">
+                    <img src="images/whatsapp.png" alt="WhatsApp">
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 TabloNest - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <script>
+        // عرض الأقسام المختلفة
+        function showProducts() {
+            document.getElementById('productsSection').classList.remove('hidden');
+            document.getElementById('productDetail').classList.add('hidden');
+            document.getElementById('orderForm').classList.add('hidden');
+            document.getElementById('customOrder').classList.add('hidden');
+            document.getElementById('contact').classList.add('hidden');
+        }
+
+        function showProductDetail(productId, element) {
+            // إضافة تأثير النقر
+            if(element) {
+                element.classList.add('click-effect');
+                setTimeout(() => {
+                    element.classList.remove('click-effect');
+                }, 400);
+            }
+            
+            document.getElementById('detailImage').src = `images/tablo1_${productId.toString().padStart(2, '0')}.jpg`;
+            document.getElementById('productDescription').textContent = `تبلوه رقم ${productId} - مقاس 30×40 سم - خشب عالي الجودة - طباعة ديجتال ليزر`;
+            
+            document.getElementById('productsSection').classList.add('hidden');
+            document.getElementById('productDetail').classList.remove('hidden');
+            document.getElementById('orderForm').classList.add('hidden');
+            document.getElementById('customOrder').classList.add('hidden');
+            document.getElementById('contact').classList.add('hidden');
+        }
+
+        function zoomProductImage(imgElement) {
+            // إضافة تأثير النقر على الصورة
+            imgElement.classList.add('click-effect');
+            setTimeout(() => {
+                imgElement.classList.remove('click-effect');
+            }, 400);
+            
+            // تكبير الصورة عند النقر عليها
+            if (imgElement.style.transform === 'scale(1.5)') {
+                imgElement.style.transform = 'scale(1)';
+            } else {
+                imgElement.style.transform = 'scale(1.5)';
+            }
+        }
+
+        function showOrderForm(button) {
+            // إضافة تأثير النقر على الزر
+            if(button) {
+                button.classList.add('click-effect');
+                setTimeout(() => {
+                    button.classList.remove('click-effect');
+                }, 400);
+            }
+            
+            document.getElementById('orderForm').classList.remove('hidden');
+            document.getElementById('productDetail').classList.add('hidden');
+        }
+
+        function showCustomOrder() {
+            document.getElementById('customOrder').classList.remove('hidden');
+            document.getElementById('productsSection').classList.add('hidden');
+            document.getElementById('productDetail').classList.add('hidden');
+            document.getElementById('orderForm').classList.add('hidden');
+            document.getElementById('contact').classList.add('hidden');
+        }
+
+        function showContact() {
+            document.getElementById('contact').classList.remove('hidden');
+            document.getElementById('productsSection').classList.add('hidden');
+            document.getElementById('productDetail').classList.add('hidden');
+            document.getElementById('orderForm').classList.add('hidden');
+            document.getElementById('customOrder').classList.add('hidden');
+        }
+
+        // عرض طريقة الدفع المختارة
+        function showPaymentMethod(method) {
+            if (method === 'instapay') {
+                document.getElementById('instapayDetails').classList.remove('hidden');
+            } else {
+                document.getElementById('instapayDetails').classList.add('hidden');
+            }
+        }
+
+        function showCustomPaymentMethod(method) {
+            if (method === 'instapay') {
+                document.getElementById('customInstapayDetails').classList.remove('hidden');
+            } else {
+                document.getElementById('customInstapayDetails').classList.add('hidden');
+            }
+        }
+
+        // التحقق من صحة نموذج الطلب العادي
+        function validateOrderForm() {
+            let isValid = true;
+            const form = document.getElementById('orderFormData');
+            
+            // التحقق من الاسم
+            const nameInput = form.elements['name'];
+            if (!nameInput.value.trim()) {
+                nameInput.classList.add('error');
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            } else {
+                nameInput.classList.remove('error');
+                document.getElementById('nameError').style.display = 'none';
+            }
+            
+            // التحقق من الهاتف
+            const phoneInput = form.elements['phone'];
+            if (!phoneInput.value.trim()) {
+                phoneInput.classList.add('error');
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            } else {
+                phoneInput.classList.remove('error');
+                document.getElementById('phoneError').style.display = 'none';
+            }
+            
+            // التحقق من العنوان
+            const addressInput = form.elements['address'];
+            if (!addressInput.value.trim()) {
+                addressInput.classList.add('error');
+                document.getElementById('addressError').style.display = 'block';
+                isValid = false;
+            } else {
+                addressInput.classList.remove('error');
+                document.getElementById('addressError').style.display = 'none';
+            }
+            
+            // التحقق من طريقة الدفع
+            const paymentInput = form.elements['payment_method'];
+            if (!paymentInput.value) {
+                paymentInput.classList.add('error');
+                document.getElementById('paymentError').style.display = 'block';
+                isValid = false;
+            } else {
+                paymentInput.classList.remove('error');
+                document.getElementById('paymentError').style.display = 'none';
+            }
+            
+            // إذا كان النموذج صالحاً، قم بإرسال الطلب
+            if (isValid) {
+                submitOrder();
+            }
+        }
+
+        // التحقق من صحة نموذج الطلب المخصص
+        function validateCustomOrderForm() {
+            let isValid = true;
+            const form = document.getElementById('customOrderFormData');
+            
+            // التحقق من ملف الصورة
+            const fileInput = form.elements['design_file'];
+            if (!fileInput.value) {
+                fileInput.classList.add('error');
+                document.getElementById('fileError').style.display = 'block';
+                isValid = false;
+            } else {
+                fileInput.classList.remove('error');
+                document.getElementById('fileError').style.display = 'none';
+            }
+            
+            // التحقق من الاسم
+            const nameInput = form.elements['name'];
+            if (!nameInput.value.trim()) {
+                nameInput.classList.add('error');
+                document.getElementById('customNameError').style.display = 'block';
+                isValid = false;
+            } else {
+                nameInput.classList.remove('error');
+                document.getElementById('customNameError').style.display = 'none';
+            }
+            
+            // التحقق من الهاتف
+            const phoneInput = form.elements['phone'];
+            if (!phoneInput.value.trim()) {
+                phoneInput.classList.add('error');
+                document.getElementById('customPhoneError').style.display = 'block';
+                isValid = false;
+            } else {
+                phoneInput.classList.remove('error');
+                document.getElementById('customPhoneError').style.display = 'none';
+            }
+            
+            // التحقق من العنوان
+            const addressInput = form.elements['address'];
+            if (!addressInput.value.trim()) {
+                addressInput.classList.add('error');
+                document.getElementById('customAddressError').style.display = 'block';
+                isValid = false;
+            } else {
+                addressInput.classList.remove('error');
+                document.getElementById('customAddressError').style.display = 'none';
+            }
+            
+            // التحقق من طريقة الدفع
+            const paymentInput = form.elements['payment_method'];
+            if (!paymentInput.value) {
+                paymentInput.classList.add('error');
+                document.getElementById('customPaymentError').style.display = 'block';
+                isValid = false;
+            } else {
+                paymentInput.classList.remove('error');
+                document.getElementById('customPaymentError').style.display = 'none';
+            }
+            
+            // إذا كان النموذج صالحاً، قم بإرسال الطلب
+            if (isValid) {
+                submitCustomOrder();
+            }
+        }
+
+        // إرسال طلب المنتج
+        function submitOrder() {
+            const form = document.getElementById('orderFormData');
+            const formData = new FormData(form);
+            
+            document.getElementById('orderFormData').classList.add('hidden');
+            document.getElementById('successMessage').classList.remove('hidden');
+            
+            const phoneNumber = "201070028085";
+            let message = `*طلب جديد من TabloNest*%0a%0a`;
+            message += `*المنتج:* ${document.getElementById('productDescription').textContent}%0a`;
+            message += `*الاسم:* ${formData.get('name')}%0a`;
+            message += `*الهاتف:* ${formData.get('phone')}%0a`;
+            message += `*العنوان:* ${formData.get('address')}%0a`;
+            message += `*طريقة الدفع:* ${formData.get('payment_method') === 'cash' ? 'الدفع عند الاستلام' : 'InstaPay'}%0a`;
+            message += `*الإجمالي:* 270 جنيه (200 جنيه سعر المنتج + 70 جنيه مصاريف شحن)%0a%0a`;
+            
+            window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+            
+            setTimeout(() => {
+                location.reload();
+            }, 5000);
+        }
+
+        // إرسال طلب التصميم الخاص
+        function submitCustomOrder() {
+            const form = document.getElementById('customOrderFormData');
+            const formData = new FormData(form);
+            
+            document.getElementById('customOrderFormData').classList.add('hidden');
+            document.getElementById('customSuccessMessage').classList.remove('hidden');
+            
+            const phoneNumber = "201070028085";
+            let message = `*طلب تصميم خاص من TabloNest*%0a%0a`;
+            message += `*الاسم:* ${formData.get('name')}%0a`;
+            message += `*الهاتف:* ${formData.get('phone')}%0a`;
+            message += `*العنوان:* ${formData.get('address')}%0a`;
+            message += `*طريقة الدفع:* ${formData.get('payment_method') === 'cash' ? 'الدفع عند الاستلام' : 'InstaPay'}%0a`;
+            message += `*الإجمالي:* 370 جنيه (300 جنيه سعر المنتج + 70 جنيه مصاريف شحن)%0a%0a`;
+            
+            window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+            
+            setTimeout(() => {
+                location.reload();
+            }, 5000);
+        }
+
+        // إظهار قسم المنتجات عند تحميل الصفحة
+        window.onload = function() {
+            showProducts();
+        };
+    </script>
+</body>
+</html>
